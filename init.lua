@@ -82,7 +82,7 @@ vim.api.nvim_create_user_command(
     'CD',
     function()
         local filedir = vim.fn.expand('%:p:h')
-        vim.cmd('cd ' .. filedir)
+        vim.cmd('lcd ' .. filedir) --NOTE: lcd is local cd, for windows use cd (try cd if doesnt work)
         print(filedir)
     end,
     { desc = 'cd into current file directory' }
@@ -381,6 +381,9 @@ vim.keymap.set("n", "<leader>rr", ":MoltenReevaluateCell<CR>",
 vim.keymap.set("v", "<leader>r", ":<C-u>MoltenEvaluateVisual<CR>gv",
     { silent = true, desc = "evaluate visual selection" })
 
+
+
+-- TODO: fedora terminal has a conflict with these alt binds
 
 -- Alt+ -> and Alt+ <- to switch between tabs
 
