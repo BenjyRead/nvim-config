@@ -725,3 +725,6 @@ require('nvim-tree').setup({
 -- Ctrl+N to open nvim-tree
 vim.api.nvim_set_keymap('n', '<C-n>', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('i', '<C-n>', '<Esc>:NvimTreeToggle<CR>i', { noremap = true, silent = true })
+
+
+--TODO: vim.lsp.diagnostic.config settings
