@@ -1,5 +1,8 @@
 --:%y to yank whole file
 
+-- Disable Ctrl+Z closing neovim
+vim.keymap.set('n', '<C-z>', '<Nop>')
+
 --adding yanked stuff to clipboard automatically
 vim.opt.clipboard = 'unnamedplus'
 
@@ -264,15 +267,20 @@ require("lazy").setup({
         version = '*',
     },
     {
-        --TODO: unsure what this does, check if works
         "hrsh7th/nvim-cmp",
         dependencies = {
             -- Snippet Engine & its associated nvim-cmp source
             "L3MON4D3/LuaSnip",
             "saadparwaiz1/cmp_luasnip",
 
+            -- source path
+            "hrsh7th/cmp-path",
+
             -- Adds LSP completion capabilities
             "hrsh7th/cmp-nvim-lsp",
+
+            -- Adds buffer completion capabilities
+            "hrsh7th/cmp-buffer",
 
             -- Adds a number of user-friendly snippets
             "rafamadriz/friendly-snippets",
@@ -361,30 +369,30 @@ require("lazy").setup({
     {
         'tpope/vim-dadbod',
         lazy = true,
-    }
+    },
     {
         'kristijanhusak/vim-dadbod-ui',
-          dependencies = {
-            { 'tpope/vim-dadbod', lazy = true },
+        dependencies = {
+            { 'tpope/vim-dadbod',                     lazy = true },
             { 'kristijanhusak/vim-dadbod-completion', ft = { 'sql', 'mysql', 'plsql' }, lazy = true }, -- Optional
-          },
-          cmd = {
+        },
+        cmd = {
             'DBUI',
             'DBUIToggle',
             'DBUIAddConnection',
             'DBUIFindBuffer',
-          },
-          init = function()
+        },
+        init = function()
             -- Your DBUI configuration
             vim.g.db_ui_use_nerd_fonts = 1
-          end,
-    },
-
+        end,
+    }
 })
 
 
--- Disable Ctrl+Z closing neovim
-vim.keymap.set('n', '<C-z>', '<Nop>')
+
+
+
 
 -- Remap > and < to behave like Tab and Shift-Tab TODO: doesnt work
 vim.api.nvim_set_keymap('n', '>', '>>_', { noremap = true, silent = true })
@@ -500,6 +508,15 @@ cmp.setup({
         { name = "luasnip" },
     },
 
+})
+
+-- nvim-cmp settings for sql completion (100% stolen from TJ)
+
+cmp.setup.filetype({ "sql" }, {
+    sources = {
+        { name = "vim-dadbod-completion" },
+        { name = "buffer" }, -- Use buffer source for path completion
+    }
 })
 
 
