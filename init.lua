@@ -358,7 +358,28 @@ require("lazy").setup({
             vim.api.nvim_set_keymap('n', '<leader>o', '<cmd>Oil<CR>', { noremap = true, silent = true })
         end,
     },
+    {
+        'kristijanhusak/vim-dadbod-ui',
+          dependencies = {
+            { 'tpope/vim-dadbod', lazy = true },
+            { 'kristijanhusak/vim-dadbod-completion', ft = { 'sql', 'mysql', 'plsql' }, lazy = true }, -- Optional
+          },
+          cmd = {
+            'DBUI',
+            'DBUIToggle',
+            'DBUIAddConnection',
+            'DBUIFindBuffer',
+          },
+          init = function()
+            -- Your DBUI configuration
+            vim.g.db_ui_use_nerd_fonts = 1
+          end,
+    }
 })
+
+
+-- Disable Ctrl+Z closing neovim
+vim.keymap.set('n', '<C-z>', '<Nop>')
 
 -- Remap > and < to behave like Tab and Shift-Tab TODO: doesnt work
 vim.api.nvim_set_keymap('n', '>', '>>_', { noremap = true, silent = true })
