@@ -114,12 +114,13 @@ vim.api.nvim_set_keymap('n', '<MiddleMouse>', '<Nop>', { noremap = true })
 
 
 --Ctrl+V for pasting from clipboard (not buffer)
+--TODO: doesn't work
 
 -- Insert mode
-vim.api.nvim_set_keymap('i', '<C-V>', '<C-R>+', { noremap = false })
+vim.api.nvim_set_keymap('i', '<C-V>', '"+p', { noremap = false })
 
 -- Normal mode
-vim.api.nvim_set_keymap('n', '<C-V>', '<C-R>+', { noremap = false })
+vim.api.nvim_set_keymap('n', '<C-V>', '"+p', { noremap = false })
 
 -- TODO: Highlight + Tab to indent (sticks to every 4th line)
 
@@ -771,3 +772,10 @@ vim.api.nvim_set_keymap('i', '<C-n>', '<Esc>:NvimTreeToggle<CR>i', { noremap = t
 
 
 --TODO: vim.lsp.diagnostic.config settings
+
+--TODO: Ctrl+w + arrows to change windows instead of hjkl like vim weirdos
+
+-- vim.api.nvim_set_keymap('n', '<C-w><Left>', '<Cmd>wincmd h<CR>', { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap('n', '<C-w><Down>', '<Cmd>wincmd j<CR>', { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap('n', '<C-w><Up>', '<Cmd>wincmd k<CR>', { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap('n', '<C-w><Right>', '<Cmd>wincmd l<CR>', { noremap = true, silent = true })
