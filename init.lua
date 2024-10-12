@@ -117,7 +117,7 @@ vim.api.nvim_set_keymap('n', '<MiddleMouse>', '<Nop>', { noremap = true })
 --TODO: doesn't work
 
 -- Insert mode
-vim.api.nvim_set_keymap('i', '<C-V>', '"+p', { noremap = false })
+vim.api.nvim_set_keymap('i', '<C-V>', '<C-R>+', { noremap = false })
 
 -- Normal mode
 vim.api.nvim_set_keymap('n', '<C-V>', '"+p', { noremap = false })
