@@ -367,28 +367,6 @@ require("lazy").setup({
             vim.api.nvim_set_keymap('n', '<leader>o', '<cmd>Oil<CR>', { noremap = true, silent = true })
         end,
     },
-    {
-        'tpope/vim-dadbod',
-        lazy = true,
-    },
-    {
-        'kristijanhusak/vim-dadbod-ui',
-        dependencies = {
-            { 'tpope/vim-dadbod',                     lazy = true },
-            { 'kristijanhusak/vim-dadbod-completion', ft = { 'sql', 'mysql', 'plsql' }, lazy = true }, -- Optional
-        },
-        cmd = {
-            'DBUI',
-            'DBUIToggle',
-            'DBUIAddConnection',
-            'DBUIFindBuffer',
-        },
-        event = "VeryLazy",
-        init = function()
-            -- Your DBUI configuration
-            vim.g.db_ui_use_nerd_fonts = 1
-        end,
-    }
 })
 
 
@@ -508,20 +486,11 @@ cmp.setup({
     sources = {
         { name = "nvim_lsp" },
         { name = "luasnip" },
-        { name = "vim-dadbod-completion" },
+        { name = "buffer" },
+        { name = "path" },
     },
 
 })
-
--- nvim-cmp settings for sql completion (100% stolen from TJ)
-
-cmp.setup.filetype({ "sql" }, {
-    sources = {
-        { name = "vim-dadbod-completion" },
-        { name = "buffer" }, -- Use buffer source for path completion
-    }
-})
-
 
 require 'nvim-web-devicons'.setup({
     default = true
