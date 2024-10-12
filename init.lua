@@ -383,6 +383,7 @@ require("lazy").setup({
             'DBUIAddConnection',
             'DBUIFindBuffer',
         },
+        event = "VeryLazy",
         init = function()
             -- Your DBUI configuration
             vim.g.db_ui_use_nerd_fonts = 1
@@ -507,6 +508,7 @@ cmp.setup({
     sources = {
         { name = "nvim_lsp" },
         { name = "luasnip" },
+        { name = "vim-dadbod-completion" },
     },
 
 })
@@ -611,7 +613,7 @@ local servers = {
     kotlin_language_server = {
         filetypes = { "kotlin", "kts" },
     },
-    tsserver = {},
+    ts_ls = {},
     html = {},
 }
 
