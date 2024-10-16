@@ -42,6 +42,16 @@ vim.cmd([[filetype plugin indent on]])
 -- Enable smart indentation
 vim.o.smartindent = true
 
+-- different tab settings for java files (google-java-format is weird)
+vim.api.nvim_create_autocmd({ "FileType" }, {
+    pattern = { "java" },
+    callback = function()
+        vim.o.tabstop = 2
+        vim.o.shiftwidth = 2
+        vim.o.softtabstop = 2
+    end,
+})
+
 
 --ctrl+backspace works as intended
 
@@ -577,7 +587,7 @@ vim.api.nvim_set_keymap('n', '<Leader>g', '<cmd>Telescope live_grep<cr>', { nore
 -- manually install any LSP that do not require settings
 -- NOTE: this is a dictionary in lua
 local servers = {
-    pylsp = {},
+    pyright = {},
     rust_analyzer = {},
     kotlin_language_server = {
         filetypes = { "kotlin", "kts" },
