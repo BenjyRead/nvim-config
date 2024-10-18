@@ -522,7 +522,8 @@ require("conform").setup({
         -- sql = {
         --     "sql_formatter",
         -- },
-        java = { "google-java-format" },
+        --TODO: this slows down conform to a halt for some reason
+        -- java = { "google-java-format" },
     },
     format_on_save = {
         -- These options will be passed to conform.format()
