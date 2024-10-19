@@ -523,6 +523,7 @@ require("conform").setup({
         --     "sql_formatter",
         -- },
         --TODO: this slows down conform to a halt for some reason
+        -- NOTE: might be due to nvim-java/jdtls having a different formatter
         -- java = { "google-java-format" },
     },
     format_on_save = {
