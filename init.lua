@@ -378,7 +378,7 @@ require("lazy").setup({
         end,
     },
     {
-        'ErichDonGubler/lsp_lines.nvim',
+        'BenjyRead/lsp_lines.nvim',
         config = function()
             require('lsp_lines').setup()
             -- Disable virtual_text since it's redundant due to lsp_lines.
