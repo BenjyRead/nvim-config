@@ -600,7 +600,8 @@ vim.api.nvim_set_keymap('n', '<Leader>g', '<cmd>Telescope live_grep<cr>', { nore
 -- manually install any LSP that do not require settings
 -- NOTE: this is a dictionary in lua
 local servers = {
-    pyright = {},
+    -- ran into a weird bug with pyright, and pylsp just sucks
+    ruff_lsp = {},
     rust_analyzer = {},
     kotlin_language_server = {
         filetypes = { "kotlin", "kts" },
