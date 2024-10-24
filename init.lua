@@ -377,7 +377,18 @@ require("lazy").setup({
             vim.api.nvim_set_keymap('n', '<leader>o', '<cmd>Oil<CR>', { noremap = true, silent = true })
         end,
     },
+    {
+        'ErichDonGubler/lsp_lines.nvim',
+        config = function()
+            require('lsp_lines').setup()
+            -- Disable virtual_text since it's redundant due to lsp_lines.
+            vim.diagnostic.config({
+              virtual_text = false,
+            })
+        end,
+    }
 })
+
 
 
 
