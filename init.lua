@@ -52,6 +52,10 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
     end,
 })
 
+--Expand errors in lsp?
+vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+
+vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "Open floating diagnostic message" })
 
 --ctrl+backspace works as intended
 
@@ -405,16 +409,16 @@ vim.api.nvim_set_keymap('v', '<', '<gv', { noremap = true, silent = true })
 --TODO: doesnt work
 --TODO: better decriptions
 
-vim.keymap.set("n", "<leader>mi", ":MoltenInit<CR>",
-    { silent = true, desc = "[M]olten [I]nitialize" })
-vim.keymap.set("n", "<leader>e", ":MoltenEvaluateOperator<CR>",
-    { silent = true, desc = "run operator selection" })
-vim.keymap.set("n", "<leader>rl", ":MoltenEvaluateLine<CR>",
-    { silent = true, desc = "evaluate line" })
-vim.keymap.set("n", "<leader>rr", ":MoltenReevaluateCell<CR>",
-    { silent = true, desc = "re-evaluate cell" })
-vim.keymap.set("v", "<leader>r", ":<C-u>MoltenEvaluateVisual<CR>gv",
-    { silent = true, desc = "evaluate visual selection" })
+-- vim.keymap.set("n", "<leader>mi", ":MoltenInit<CR>",
+--     { silent = true, desc = "[M]olten [I]nitialize" })
+-- vim.keymap.set("n", "<leader>e", ":MoltenEvaluateOperator<CR>",
+--     { silent = true, desc = "run operator selection" })
+-- vim.keymap.set("n", "<leader>rl", ":MoltenEvaluateLine<CR>",
+--     { silent = true, desc = "evaluate line" })
+-- vim.keymap.set("n", "<leader>rr", ":MoltenReevaluateCell<CR>",
+--     { silent = true, desc = "re-evaluate cell" })
+-- vim.keymap.set("v", "<leader>r", ":<C-u>MoltenEvaluateVisual<CR>gv",
+--     { silent = true, desc = "evaluate visual selection" })
 
 
 
@@ -600,7 +604,6 @@ vim.api.nvim_set_keymap('n', '<Leader>g', '<cmd>Telescope live_grep<cr>', { nore
 -- manually install any LSP that do not require settings
 -- NOTE: this is a dictionary in lua
 local servers = {
-    pyright = {},
     rust_analyzer = {},
     kotlin_language_server = {
         filetypes = { "kotlin", "kts" },
