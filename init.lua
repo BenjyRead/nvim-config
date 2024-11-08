@@ -387,8 +387,14 @@ require("lazy").setup({
             require('lsp_lines').setup()
             -- Disable virtual_text since it's redundant due to lsp_lines.
             vim.diagnostic.config({
-              virtual_text = false,
+                virtual_text = false,
             })
+        end,
+    },
+    {
+        dir = "~/Documents/neovim_plugin_stuff/simple-nvim-plugin",
+        config = function()
+            require('simple-nvim-plugin')
         end,
     }
 })
