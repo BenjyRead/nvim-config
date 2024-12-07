@@ -330,13 +330,13 @@ require("lazy").setup({
         version = '^4', -- Recommended
         lazy = false,   -- This plugin is already lazy
     },
-    {
-        'benlubas/molten-nvim',
-        dependencies = {
-            '3rd/image.nvim',
-            'willothy/wezterm.nvim'
-        },
-    },
+    -- {
+    --     'benlubas/molten-nvim',
+    --     dependencies = {
+    --         '3rd/image.nvim',
+    --         'willothy/wezterm.nvim'
+    --     },
+    -- },
     {
         'nvim-java/nvim-java',
         dependencies = {
