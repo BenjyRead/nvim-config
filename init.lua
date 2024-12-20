@@ -61,8 +61,6 @@ vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "Open float
 
 vim.api.nvim_set_keymap('i', '<C-H>', '<C-W>', { noremap = true })
 
---TODO: Ctrl+Left/Right in normal mode to skip words instead of whatever the fuck its doing right now
-
 --TODO: autocomplete deletes characters when autocompleting before it
 
 --TODO: on creation of a java file, make a public class with name of the file
@@ -90,7 +88,7 @@ vim.keymap.set('i', '<C-z>', '<C-o>u<C-g>u', { noremap = true, silent = true })
 
 -- TODO: stop comments from generating when you press enter at the end of a commented line
 
---TODO: Ctrl+Forward goes to end of line instead of next line
+--TODO: Ctrl+Forward goes to end of line instead of start of next line
 
 --TODO: home goes to start of first character, not start of line
 
@@ -396,6 +394,16 @@ require("lazy").setup({
         config = function()
             require('simple-nvim-plugin')
         end,
+    },
+    --TODO: get markdown editing setup
+    {
+        'MeanderingProgrammer/render-markdown.nvim',
+        dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.nvim' }, -- if you use the mini.nvim suite
+        -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
+        -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
+        ---@module 'render-markdown'
+        ---@type render.md.UserConfig
+        opts = {},
     }
 })
 
@@ -404,6 +412,7 @@ require("lazy").setup({
 
 
 
+--TODO: bind something convienient to endline
 
 -- Remap > and < to behave like Tab and Shift-Tab TODO: doesnt work
 vim.api.nvim_set_keymap('n', '>', '>>_', { noremap = true, silent = true })
