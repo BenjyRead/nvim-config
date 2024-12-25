@@ -620,9 +620,6 @@ vim.api.nvim_set_keymap('n', '<Leader>g', '<cmd>Telescope live_grep<cr>', { nore
 -- NOTE: this is a dictionary in lua
 local servers = {
     rust_analyzer = {},
-    kotlin_language_server = {
-        filetypes = { "kotlin", "kts" },
-    },
     ts_ls = {},
     html = {},
 }
