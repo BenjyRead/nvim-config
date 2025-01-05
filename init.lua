@@ -58,12 +58,11 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "Open floating diagnostic message" })
 
 --ctrl+backspace works as intended
+-- TODO: doesnt work sometimes (sometimes when words or too big for example sometimes DataIntegrityViolationException doesnt work)
 
 vim.api.nvim_set_keymap('i', '<C-H>', '<C-W>', { noremap = true })
 
 --TODO: autocomplete deletes characters when autocompleting before it
-
---TODO: on creation of a java file, make a public class with name of the file
 
 --TODO: add 'end' to lua function automatically
 
@@ -140,9 +139,6 @@ vim.api.nvim_set_keymap('n', '<C-V>', '"+p', { noremap = false })
 
 -- TODO: On Ctrl+/ (ggc) comment, move cursor as many characters as the comment syntax has (ie: move 2 characters for -- in lua)
 
--- TODO: Auto-closing brackets, quotes, etc
-
--- TODO: Move cursor to correct position when opening curly braces
 
 --install lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -379,16 +375,16 @@ require("lazy").setup({
             vim.api.nvim_set_keymap('n', '<leader>o', '<cmd>Oil<CR>', { noremap = true, silent = true })
         end,
     },
-    {
-        'BenjyRead/lsp_lines.nvim',
-        config = function()
-            require('lsp_lines').setup()
-            -- Disable virtual_text since it's redundant due to lsp_lines.
-            vim.diagnostic.config({
-                virtual_text = false,
-            })
-        end,
-    },
+    -- {
+    --     'BenjyRead/lsp_lines.nvim',
+    --     config = function()
+    --         require('lsp_lines').setup()
+    --         -- Disable virtual_text since it's redundant due to lsp_lines.
+    --         vim.diagnostic.config({
+    --             virtual_text = false,
+    --         })
+    --     end,
+    -- },
     {
         dir = "~/Documents/neovim_plugin_stuff/simple-nvim-plugin",
         config = function()
