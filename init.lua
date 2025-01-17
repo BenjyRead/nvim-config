@@ -2,6 +2,8 @@
 
 -- Disable Ctrl+Z closing neovim
 vim.keymap.set('n', '<C-z>', '<Nop>')
+vim.keymap.set('i', '<C-z>', '<Nop>')
+vim.keymap.set('v', '<C-z>', '<Nop>')
 
 --adding yanked stuff to clipboard automatically
 vim.opt.clipboard = 'unnamedplus'
