@@ -64,8 +64,6 @@ vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "Open float
 
 vim.api.nvim_set_keymap("i", "<C-H>", "<C-W>", { noremap = true })
 
---TODO: autocomplete deletes characters when autocompleting before it
-
 --TODO: add 'end' to lua function automatically
 
 -- Search ignorescase
@@ -90,14 +88,12 @@ vim.keymap.set("i", "<C-z>", "<C-o>u<C-g>u", { noremap = true, silent = true })
 
 --TODO: Ctrl+Forward goes to end of line instead of start of next line
 
---TODO: home goes to start of first character, not start of line
-
 vim.api.nvim_create_user_command(
 	-- apparently I have to make this uppercase :(
 	"CD",
 	function()
 		local filedir = vim.fn.expand("%:p:h")
-		vim.cmd("lcd " .. filedir) --NOTE: lcd is local cd, for windows use cd (try cd if doesnt work)
+		vim.cmd("lcd " .. filedir) --NOTE: lcd is local cd (try cd if doesnt work)
 		print(filedir)
 	end,
 	{ desc = "cd into current file directory" }
@@ -311,12 +307,12 @@ require("lazy").setup({
 				formatters_by_ft = {
 					lua = { "stylua" },
 					-- Conform will run multiple formatters sequentially
-					-- python = { "ruff" },
+					python = { "ruff" },
 					-- Use a sub-list to run only the first available formatter
-					-- javascript = { { "prettier" } },
+					javascript = { { "prettier" } },
 					--TODO: this slows down conform to a halt for some reason
 					-- NOTE: might be due to nvim-java/jdtls having a different formatter
-					-- java = { "google-java-format" },
+					java = { "google-java-format" },
 				},
 				format_on_save = {
 					-- These options will be passed to conform.format()
@@ -517,7 +513,8 @@ cmp.setup({
 		["<C-Space>"] = cmp.mapping.complete({}),
 
 		["<CR>"] = cmp.mapping.confirm({
-			behavior = cmp.ConfirmBehavior.Replace,
+			-- behavior = cmp.ConfirmBehavior.Replace,
+			behavior = cmp.ConfirmBehavior.Insert,
 			select = true,
 		}),
 
