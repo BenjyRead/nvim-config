@@ -64,8 +64,6 @@ vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "Open float
 
 vim.api.nvim_set_keymap("i", "<C-H>", "<C-W>", { noremap = true })
 
---TODO: add 'end' to lua function automatically
-
 -- Search ignorescase
 vim.o.ignorecase = true
 
@@ -88,6 +86,7 @@ vim.keymap.set("i", "<C-z>", "<C-o>u<C-g>u", { noremap = true, silent = true })
 
 --TODO: Ctrl+Forward goes to end of line instead of start of next line
 
+-- :CD command to cd into current file's directory
 vim.api.nvim_create_user_command(
 	-- apparently I have to make this uppercase :(
 	"CD",
