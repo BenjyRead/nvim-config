@@ -135,292 +135,373 @@ vim.api.nvim_set_keymap("n", "<C-V>", '"+p', { noremap = false })
 
 -- TODO: On Ctrl+/ (ggc) comment, move cursor as many characters as the comment syntax has (ie: move 2 characters for -- in lua)
 
---install lazy.nvim
+-- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
-	vim.fn.system({
-		"git",
-		"clone",
-		"--filter=blob:none",
-		"https://github.com/folke/lazy.nvim.git",
-		"--branch=stable", -- latest stable release
-		lazypath,
-	})
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+	local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+	local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+	if vim.v.shell_error ~= 0 then
+		vim.api.nvim_echo({
+			{ "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+			{ out, "WarningMsg" },
+			{ "\nPress any key to exit..." },
+		}, true, {})
+		vim.fn.getchar()
+		os.exit(1)
+	end
 end
 vim.opt.rtp:prepend(lazypath)
 
 --plugins
 require("lazy").setup({
-	{
-		"williamboman/mason.nvim",
-	},
-	{
-		"EdenEast/nightfox.nvim",
-	},
-
-	-- Some plugins dont need configuration
-	"zbirenbaum/copilot.lua",
-
-	{
-		"neovim/nvim-lspconfig",
-	},
-	{
-		"lukas-reineke/indent-blankline.nvim",
-		main = "ibl",
-		opts = {},
-		config = function()
-			require("ibl").setup({
-				indent = {
-					char = "|",
-				},
-			})
-		end,
-	},
-	{
-		"williamboman/mason-lspconfig.nvim",
-	},
-	{
-		"lewis6991/gitsigns.nvim",
-	},
-	{
-		"nvim-lualine/lualine.nvim",
-		dependencies = { "nvim-tree/nvim-web-devicons" },
-	},
-	{
-		"folke/neodev.nvim",
-		opts = {},
-	},
-	{
-		"nvim-tree/nvim-web-devicons",
-	},
-	{
-		"romgrk/barbar.nvim",
-		dependencies = {
-			"lewis6991/gitsigns.nvim", -- OPTIONAL: for git status
-			"nvim-tree/nvim-web-devicons", -- OPTIONAL: for file icons
+	spec = {
+		{
+			"williamboman/mason.nvim",
+		},
+		{
+			"EdenEast/nightfox.nvim",
 		},
 
-		init = function()
-			vim.g.barbar_auto_setup = false
-		end,
-		opts = {
-			animation = true,
-			icons = {
-				filetype = {
-					enabled = true,
+		-- Some plugins dont need configuration
+		"zbirenbaum/copilot.lua",
+
+		{
+			"neovim/nvim-lspconfig",
+		},
+		{
+			"lukas-reineke/indent-blankline.nvim",
+			main = "ibl",
+			opts = {},
+			config = function()
+				require("ibl").setup({
+					indent = {
+						char = "|",
+					},
+				})
+			end,
+		},
+		{
+			"williamboman/mason-lspconfig.nvim",
+		},
+		{
+			"lewis6991/gitsigns.nvim",
+		},
+		{
+			"nvim-lualine/lualine.nvim",
+			dependencies = { "nvim-tree/nvim-web-devicons" },
+		},
+		{
+			"nvim-tree/nvim-web-devicons",
+		},
+		{
+			"romgrk/barbar.nvim",
+			dependencies = {
+				"lewis6991/gitsigns.nvim", -- OPTIONAL: for git status
+				"nvim-tree/nvim-web-devicons", -- OPTIONAL: for file icons
+			},
+
+			init = function()
+				vim.g.barbar_auto_setup = false
+			end,
+			opts = {
+				animation = true,
+				icons = {
+					filetype = {
+						enabled = true,
+					},
 				},
 			},
 		},
-	},
-	{
-		"nvim-treesitter/nvim-treesitter",
-		build = ":TSUpdate",
-		config = function()
-			require("nvim-treesitter.install").prefer_git = false
-			require("nvim-treesitter.install").compilers = { "clang", "gcc" }
+		{
+			"nvim-treesitter/nvim-treesitter",
+			build = ":TSUpdate",
+			config = function()
+				-- require("nvim-treesitter.install").prefer_git = false
+				-- require("nvim-treesitter.install").compilers = { "clang", "gcc" }
 
-			require("nvim-treesitter.configs").setup({
-				ensure_installed = {
-					"c",
-					"python",
-					"vim",
-					"lua",
-					"rust",
-					"javascript",
-					"java",
-					"sql",
-					"html",
-					"gitignore",
-					"json",
-					"yaml",
-					"dockerfile",
-					"requirements",
-					"kotlin",
-				},
-				highlight = {
-					enable = true,
-				},
-			})
-		end,
-		dependencies = {
-			"nvim-treesitter/nvim-treesitter-textobjects",
+				require("nvim-treesitter.configs").setup({
+					ensure_installed = {
+						"c",
+						"python",
+						"vim",
+						"lua",
+						"rust",
+						"javascript",
+						"java",
+						"sql",
+						"html",
+						"gitignore",
+						"json",
+						"yaml",
+						"dockerfile",
+						"requirements",
+						"kotlin",
+					},
+					sync_install = false,
+					highlight = { enable = true },
+					indent = { enable = true },
+				})
+			end,
+			dependencies = {
+				"nvim-treesitter/nvim-treesitter-textobjects",
+			},
 		},
-	},
-	{
-		"numToStr/Comment.nvim",
-		opts = {},
-		config = function()
-			require("Comment").setup()
-		end,
-	},
-	{
-		"nvim-tree/nvim-tree.lua",
-	},
-	{
-		"nvim-telescope/telescope.nvim",
-		--TOOD: add ripgrep
-		dependencies = {
-			"nvim-lua/plenary.nvim",
+		{
+			"numToStr/Comment.nvim",
+			opts = {},
+			config = function()
+				require("Comment").setup()
+			end,
 		},
-	},
-	{
-		"nvim-telescope/telescope-frecency.nvim",
-		config = function()
-			require("telescope").load_extension("frecency")
-		end,
-		dependencies = {
-			"nvim-tree/nvim-web-devicons",
+		{
+			"nvim-tree/nvim-tree.lua",
 		},
-	},
-	{
-		"danymat/neogen",
-		config = true,
-		--Only stable versions
-		version = "*",
-	},
-	{
-		"hrsh7th/nvim-cmp",
-		dependencies = {
-			-- Snippet Engine & its associated nvim-cmp source
-			"L3MON4D3/LuaSnip",
-			"saadparwaiz1/cmp_luasnip",
+		{
+			"nvim-telescope/telescope.nvim",
+			--TOOD: add ripgrep
+			dependencies = {
+				"nvim-lua/plenary.nvim",
+			},
+		},
+		{
+			"nvim-telescope/telescope-frecency.nvim",
+			config = function()
+				require("telescope").load_extension("frecency")
+			end,
+			dependencies = {
+				"nvim-tree/nvim-web-devicons",
+			},
+		},
+		{
+			"danymat/neogen",
+			config = true,
+			--Only stable versions
+			version = "*",
+		},
+		{
+			"hrsh7th/nvim-cmp",
+			dependencies = {
+				-- Snippet Engine & its associated nvim-cmp source
+				"L3MON4D3/LuaSnip",
+				"saadparwaiz1/cmp_luasnip",
 
-			-- source path
-			"hrsh7th/cmp-path",
+				-- source path
+				"hrsh7th/cmp-path",
 
-			-- Adds LSP completion capabilities
-			"hrsh7th/cmp-nvim-lsp",
+				-- Adds LSP completion capabilities
+				"hrsh7th/cmp-nvim-lsp",
 
-			-- Adds buffer completion capabilities
-			"hrsh7th/cmp-buffer",
+				-- Adds buffer completion capabilities
+				"hrsh7th/cmp-buffer",
 
-			-- Adds a number of user-friendly snippets
-			"rafamadriz/friendly-snippets",
+				-- Adds a number of user-friendly snippets
+				"rafamadriz/friendly-snippets",
+			},
+			config = function()
+				local cmp = require("cmp")
+				local luasnip = require("luasnip")
+
+				cmp.setup({
+
+					snippet = {
+						expand = function(args)
+							luasnip.lsp_expand(args.body)
+						end,
+					},
+
+					completion = {
+						completeopt = "menu,menuone,noinsert",
+					},
+
+					--TODO: not a clue what this does but it's important
+					mapping = cmp.mapping.preset.insert({
+
+						["<C-n>"] = cmp.mapping.select_next_item(),
+						["<C-p>"] = cmp.mapping.select_prev_item(),
+						["<C-d>"] = cmp.mapping.scroll_docs(-4),
+						["<C-f>"] = cmp.mapping.scroll_docs(4),
+						["<C-Space>"] = cmp.mapping.complete({}),
+
+						--This sets the insert behavior on confirimg a completion
+						["<CR>"] = cmp.mapping.confirm({
+							-- behavior = cmp.ConfirmBehavior.Replace,
+							behavior = cmp.ConfirmBehavior.Insert,
+							select = true,
+						}),
+
+						["<Tab>"] = cmp.mapping(function(fallback)
+							if cmp.visible() then
+								cmp.select_next_item()
+							elseif luasnip.expand_or_locally_jumpable() then
+								luasnip.expand_or_jump()
+							else
+								fallback()
+							end
+						end, { "i", "s" }),
+
+						["<S-Tab>"] = cmp.mapping(function(fallback)
+							if cmp.visible() then
+								cmp.select_prev_item()
+							elseif luasnip.locally_jumpable(-1) then
+								luasnip.jump(-1)
+							else
+								fallback()
+							end
+						end, { "i", "s" }),
+					}),
+
+					sources = {
+						{ name = "nvim_lsp" },
+						{ name = "luasnip" },
+						-- { name = "buffer" },
+						{ name = "path" },
+						{ name = "lazydev", group_index = 0 },
+					},
+				})
+			end,
 		},
-	},
-	{
-		"stevearc/conform.nvim",
-		opts = {},
-		config = function()
-			require("conform").setup({
-				formatters_by_ft = {
-					lua = { "stylua" },
-					-- Conform will run multiple formatters sequentially
-					python = { "ruff" },
-					-- Use a sub-list to run only the first available formatter
-					javascript = { { "prettier" } },
-					--TODO: this slows down conform to a halt for some reason
-					-- NOTE: might be due to nvim-java/jdtls having a different formatter
-					java = { "google-java-format" },
-				},
-				format_on_save = {
-					-- These options will be passed to conform.format()
-					lsp_fallback = true,
-				},
-			})
-		end,
-	},
-	{
-		--TODO: what does this do idk check it tho
-		"mfussenegger/nvim-lint",
-	},
-	{
-		"folke/todo-comments.nvim",
-		dependencies = { "nvim-lua/plenary.nvim" },
-		opts = {
-			-- your configuration comes here
-			-- or leave it empty to use the default settings
-			-- refer to the configuration section below
+		{
+			"stevearc/conform.nvim",
+			opts = {},
+			config = function()
+				require("conform").setup({
+					formatters_by_ft = {
+						-- lua = { "stylua" },
+						-- Conform will run multiple formatters sequentially
+						-- python = { "ruff" },
+						-- Use a sub-list to run only the first available formatter
+						-- javascript = { { "prettier" } },
+						--TODO: this slows down conform to a halt for some reason
+						-- NOTE: might be due to nvim-java/jdtls having a different formatter
+						-- java = { "google-java-format" },
+					},
+					format_on_save = {
+						-- These options will be passed to conform.format()
+						lsp_fallback = true,
+					},
+				})
+			end,
 		},
-	},
-	{
-		"windwp/nvim-autopairs",
-		event = "InsertEnter",
-		config = true,
-		-- use opts = {} for passing setup options
-		-- this is equalent to setup({}) function
-	},
-	{
-		"mrcjkb/rustaceanvim",
-		version = "^4", -- Recommended
-		lazy = false, -- This plugin is already lazy
-	},
-	-- {
-	--     'benlubas/molten-nvim',
-	--     dependencies = {
-	--         '3rd/image.nvim',
-	--         'willothy/wezterm.nvim'
-	--     },
-	-- },
-	{
-		"nvim-java/nvim-java",
-		-- dependencies = {
-		--     'nvim-java/lua-async-await',
-		--     'nvim-java/nvim-java-refactor',
-		--     'nvim-java/nvim-java-core',
-		--     'nvim-java/nvim-java-test',
-		--     'nvim-java/nvim-java-dap',
-		--     'MunifTanjim/nui.nvim',
-		--     'neovim/nvim-lspconfig',
-		--     'mfussenegger/nvim-dap',
-		--     {
-		--         'williamboman/mason.nvim',
-		--         opts = {
-		--             registries = {
-		--                 'github:nvim-java/mason-registry',
-		--                 'github:mason-org/mason-registry',
-		--             },
-		--         },
-		--     }
+		{
+			--TODO: what does this do idk check it tho
+			"mfussenegger/nvim-lint",
+		},
+		{
+			"folke/todo-comments.nvim",
+			dependencies = { "nvim-lua/plenary.nvim" },
+			opts = {
+				-- your configuration comes here
+				-- or leave it empty to use the default settings
+				-- refer to the configuration section below
+			},
+		},
+		{
+			"windwp/nvim-autopairs",
+			event = "InsertEnter",
+			config = true,
+			-- use opts = {} for passing setup options
+			-- this is equalent to setup({}) function
+		},
+		{
+			"mrcjkb/rustaceanvim",
+			version = "^4", -- Recommended
+			lazy = false, -- This plugin is already lazy
+		},
+		-- {
+		--     'benlubas/molten-nvim',
+		--     dependencies = {
+		--         '3rd/image.nvim',
+		--         'willothy/wezterm.nvim'
+		--     },
 		-- },
-		config = function()
-			require("java").setup()
-		end,
-	},
-	{
-		"stevearc/oil.nvim",
-		opts = {},
+		{
+			"nvim-java/nvim-java",
+			config = function()
+				require("java").setup()
+			end,
+		},
+		{
+			"stevearc/oil.nvim",
+			opts = {},
 
-		-- Optional dependencies
-		dependencies = { "nvim-tree/nvim-web-devicons" },
-		-- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if prefer nvim-web-devicons
+			-- Optional dependencies
+			dependencies = { "nvim-tree/nvim-web-devicons" },
+			-- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if prefer nvim-web-devicons
 
-		config = function()
-			require("oil").setup({
-				view_options = {
-					show_parent = true,
-					show_hidden = true,
+			config = function()
+				require("oil").setup({
+					view_options = {
+						show_parent = true,
+						show_hidden = true,
+					},
+				})
+
+				vim.api.nvim_set_keymap("n", "<leader>o", "<cmd>Oil<CR>", { noremap = true, silent = true })
+			end,
+		},
+		-- {
+		--     'BenjyRead/lsp_lines.nvim',
+		--     config = function()
+		--         require('lsp_lines').setup()
+		--         -- Disable virtual_text since it's redundant due to lsp_lines.
+		--         vim.diagnostic.config({
+		--             virtual_text = false,
+		--         })
+		--     end,
+		-- },
+		{
+			dir = "~/Documents/neovim_plugin_stuff/simple-nvim-plugin",
+			config = function()
+				require("simple-nvim-plugin")
+			end,
+		},
+		{
+			dir = "~/Documents/github/capslock-lualine.nvim",
+			-- config = function()
+			-- 	require("capslock-lualine").setup()
+			-- end,
+		},
+		--TODO: get markdown editing setup
+		{
+			"MeanderingProgrammer/render-markdown.nvim",
+			-- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.nvim' }, -- if you use the mini.nvim suite
+			-- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
+			dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" }, -- if you prefer nvim-web-devicons
+			---@module 'render-markdown'
+			---@type render.md.UserConfig
+			opts = {},
+		},
+		{
+			"folke/lazydev.nvim",
+			ft = "lua", -- only load on lua files
+			opts = {
+				library = {
+					-- See the configuration section for more details
+					-- Load luvit types when the `vim.uv` word is found
+					{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
+					"~/Documents/neovim_plugin_stuff",
+					"~/Documents/github/capslock-lualine.nvim",
 				},
-			})
+				-- always enable unless `vim.g.lazydev_enabled = false`
+				-- This is the default
+				enabled = function(root_dir)
+					return vim.g.lazydev_enabled == nil and true or vim.g.lazydev_enabled
+				end,
+			},
+		},
+		{
+			"L3MON4D3/LuaSnip",
+			-- follow latest release.
+			-- version = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+			-- install jsregexp (optional!).
+			build = "make install_jsregexp",
+			config = function()
+				local luasnip = require("luasnip")
 
-			vim.api.nvim_set_keymap("n", "<leader>o", "<cmd>Oil<CR>", { noremap = true, silent = true })
-		end,
-	},
-	-- {
-	--     'BenjyRead/lsp_lines.nvim',
-	--     config = function()
-	--         require('lsp_lines').setup()
-	--         -- Disable virtual_text since it's redundant due to lsp_lines.
-	--         vim.diagnostic.config({
-	--             virtual_text = false,
-	--         })
-	--     end,
-	-- },
-	{
-		dir = "~/Documents/neovim_plugin_stuff/simple-nvim-plugin",
-		config = function()
-			require("simple-nvim-plugin")
-		end,
-	},
-	--TODO: get markdown editing setup
-	{
-		"MeanderingProgrammer/render-markdown.nvim",
-		-- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.nvim' }, -- if you use the mini.nvim suite
-		-- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
-		dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" }, -- if you prefer nvim-web-devicons
-		---@module 'render-markdown'
-		---@type render.md.UserConfig
-		opts = {},
+				-- require("luasnip.loaders.from_vscode").lazy_load()
+				luasnip.config.setup()
+			end,
+		},
 	},
 })
 
@@ -480,71 +561,6 @@ require("nightfox").setup()
 vim.cmd("colorscheme carbonfox")
 
 require("todo-comments").setup()
-
--- [[ Configure nvim-cmp ]]
--- See `:help cmp`
-
-local cmp = require("cmp")
-local luasnip = require("luasnip")
-
-require("luasnip.loaders.from_vscode").lazy_load()
-luasnip.config.setup({})
-
-cmp.setup({
-
-	snippet = {
-		expand = function(args)
-			luasnip.lsp_expand(args.body)
-		end,
-	},
-
-	completion = {
-		completeopt = "menu,menuone,noinsert",
-	},
-
-	--TODO: not a clue what this does but it's important
-	mapping = cmp.mapping.preset.insert({
-
-		["<C-n>"] = cmp.mapping.select_next_item(),
-		["<C-p>"] = cmp.mapping.select_prev_item(),
-		["<C-d>"] = cmp.mapping.scroll_docs(-4),
-		["<C-f>"] = cmp.mapping.scroll_docs(4),
-		["<C-Space>"] = cmp.mapping.complete({}),
-
-		["<CR>"] = cmp.mapping.confirm({
-			-- behavior = cmp.ConfirmBehavior.Replace,
-			behavior = cmp.ConfirmBehavior.Insert,
-			select = true,
-		}),
-
-		["<Tab>"] = cmp.mapping(function(fallback)
-			if cmp.visible() then
-				cmp.select_next_item()
-			elseif luasnip.expand_or_locally_jumpable() then
-				luasnip.expand_or_jump()
-			else
-				fallback()
-			end
-		end, { "i", "s" }),
-
-		["<S-Tab>"] = cmp.mapping(function(fallback)
-			if cmp.visible() then
-				cmp.select_prev_item()
-			elseif luasnip.locally_jumpable(-1) then
-				luasnip.jump(-1)
-			else
-				fallback()
-			end
-		end, { "i", "s" }),
-	}),
-
-	sources = {
-		{ name = "nvim_lsp" },
-		{ name = "luasnip" },
-		{ name = "buffer" },
-		{ name = "path" },
-	},
-})
 
 require("nvim-web-devicons").setup({
 	default = true,
@@ -607,7 +623,6 @@ vim.api.nvim_set_keymap("n", "<Leader>g", "<cmd>Telescope live_grep<cr>", { nore
 -- NOTE: this is a dictionary in lua
 local servers = {
 	rust_analyzer = {},
-	ts_ls = {},
 	html = {},
 	jdtls = {},
 }
@@ -708,6 +723,7 @@ mason_lspconfig.setup_handlers({
 })
 
 -- highlighting multiple files in telescope find files and pressing enter to open them all
+-- Hacky solution but works very well
 
 local actions = require("telescope.actions")
 local action_state = require("telescope.actions.state")
