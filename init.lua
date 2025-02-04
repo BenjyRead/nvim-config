@@ -14,6 +14,10 @@ vim.wo.relativenumber = true
 --current line is real current line
 vim.opt.number = true
 
+-- TODO: search goes adjust cursor to middle of page instead of bottom
+
+
+
 -- TODO: reload config
 
 --Map leader key to space
@@ -21,7 +25,6 @@ vim.opt.number = true
 vim.g.mapleader = " "
 
 --Leader+rtp to add cwd to runtime path
---TODO: check if this works
 --
 -- vim.api.nvim_set_keymap('n', '<Leader>rtp', ':lua vim.o.runtimepath = vim.o.runtimepath .. "," .. vim.fn.getcwd()<CR>',
 --     { noremap = true, silent = true })
@@ -54,9 +57,19 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 	end,
 })
 
---Expand errors in lsp?
+--Markdown settings
+vim.api.nvim_create_autocmd({ "FileType" }, {
+    pattern = { "markdown" },
+    callback = function()
+    -- different paragraph wrapping for markdown files (by word)
+        vim.o.linebreak = true
+    end,
+})
+
+-- open quickfix menu for all errors in file
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
 
+-- Expand errors in lsp
 vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "Open floating diagnostic message" })
 
 --ctrl+backspace works as intended
@@ -462,7 +475,6 @@ require("lazy").setup({
 			-- 	require("capslock-lualine").setup()
 			-- end,
 		},
-		--TODO: get markdown editing setup
 		{
 			"MeanderingProgrammer/render-markdown.nvim",
 			-- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.nvim' }, -- if you use the mini.nvim suite
@@ -506,7 +518,6 @@ require("lazy").setup({
 	},
 })
 
---TODO: bind something convienient to endline
 
 -- Remap > and < to behave like Tab and Shift-Tab TODO: doesnt work
 vim.api.nvim_set_keymap("n", ">", ">>_", { noremap = true, silent = true })
@@ -529,7 +540,6 @@ vim.api.nvim_set_keymap("v", "<", "<gv", { noremap = true, silent = true })
 -- vim.keymap.set("v", "<leader>r", ":<C-u>MoltenEvaluateVisual<CR>gv",
 --     { silent = true, desc = "evaluate visual selection" })
 
--- TODO: fedora terminal has a conflict with these alt binds
 
 -- Alt+ -> and Alt+ <- to switch between tabs
 
@@ -626,6 +636,12 @@ local servers = {
 	rust_analyzer = {},
 	html = {},
 	jdtls = {},
+    ltex = {
+            ltex = {
+                language = "en-GB",
+                enabled = true,
+            }
+    },
 }
 
 require("lualine").setup({
@@ -791,3 +807,11 @@ vim.api.nvim_set_keymap("i", "<C-n>", "<Esc>:NvimTreeToggle<CR>i", { noremap = t
 -- vim.api.nvim_set_keymap('n', '<C-w><Down>', '<Cmd>wincmd j<CR>', { noremap = true, silent = true })
 -- vim.api.nvim_set_keymap('n', '<C-w><Up>', '<Cmd>wincmd k<CR>', { noremap = true, silent = true })
 -- vim.api.nvim_set_keymap('n', '<C-w><Right>', '<Cmd>wincmd l<CR>', { noremap = true, silent = true })
+
+-- TODO: bind to go to next/previous error/info of lsp
+
+-- TODO: up/down arrows in long line goes to same line but still up/down
+
+-- TODO: ignore spelling words in markdown files ltex lsp
+
+--TODO: word count command markdown files
