@@ -53,7 +53,7 @@ vim.o.smartindent = true
 
 -- different tab settings for java files (google-java-format is weird)
 vim.api.nvim_create_autocmd({ "FileType" }, {
-    pattern = { "java" },
+    pattern = { "java", "terraform" },
     callback = function()
         vim.o.tabstop = 2
         vim.o.shiftwidth = 2
@@ -174,6 +174,12 @@ require("lazy").setup({
     spec = {
         {
             "williamboman/mason.nvim",
+            opts = {
+                registries = {
+                    'github:nvim-java/mason-registry',
+                    'github:mason-org/mason-registry',
+                },
+            },
         },
         {
             "EdenEast/nightfox.nvim",
@@ -253,6 +259,8 @@ require("lazy").setup({
                         "dockerfile",
                         "requirements",
                         "kotlin",
+                        "bash",
+                        "terraform",
                     },
                     sync_install = false,
                     highlight = { enable = true },
@@ -524,6 +532,11 @@ require("lazy").setup({
             end,
         },
     },
+    -- TODO: get this working for tmux ressurect
+    -- {
+    --     "tpope/vim-obsession",
+    --     event = "VimEnter",
+    -- }
 })
 
 
@@ -643,7 +656,6 @@ vim.api.nvim_set_keymap("n", "<Leader>g", "<cmd>Telescope live_grep<cr>", { nore
 local servers = {
     rust_analyzer = {},
     html = {},
-    jdtls = {},
     ltex = {
         ltex = {
             language = "en-GB",
