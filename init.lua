@@ -174,12 +174,12 @@ require("lazy").setup({
     spec = {
         {
             "williamboman/mason.nvim",
-            opts = {
-                registries = {
-                    'github:nvim-java/mason-registry',
-                    'github:mason-org/mason-registry',
-                },
-            },
+            -- opts = {
+            --     registries = {
+            --         'github:nvim-java/mason-registry',
+            --         'github:mason-org/mason-registry',
+            --     },
+            -- },
         },
         {
             "EdenEast/nightfox.nvim",
@@ -403,10 +403,12 @@ require("lazy").setup({
                         --TODO: this slows down conform to a halt for some reason
                         -- NOTE: might be due to nvim-java/jdtls having a different formatter
                         -- java = { "google-java-format" },
+                        kotlin = { "ktfmt" },
                     },
                     format_on_save = {
                         -- These options will be passed to conform.format()
                         lsp_fallback = true,
+                        timeout_ms = 2000,
                     },
                 })
             end,
@@ -445,9 +447,13 @@ require("lazy").setup({
         -- },
         {
             "nvim-java/nvim-java",
-            tag = "v2.0.2",
+            -- tag = "v2.0.2",
             config = function()
-                require("java").setup()
+                require("java").setup({
+                    jdtls = {
+                        version = "1.44.0"
+                    }
+                })
             end,
         },
         {
