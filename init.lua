@@ -186,7 +186,30 @@ require("lazy").setup({
         },
 
         -- Some plugins dont need configuration
-        "zbirenbaum/copilot.lua",
+        {
+            "zbirenbaum/copilot.lua",
+            config = function()
+                --TODO: if copilot prompt is under 3 characters, ignore
+                require("copilot").setup({
+
+                    filetypes = {
+                        ["*"] = true,
+                    },
+
+                    suggestion = {
+                        enabled = true,
+                        auto_trigger = true,
+                        keymap = {
+                            accept = "<M-a>",
+                            --TODO: find a better bind (Alt+Right/Left is used for tab switching)
+                            -- next = '<M-Right>',
+                            -- prev = '<M-Left>',
+                            dismiss = "<M-d>",
+                        },
+                    },
+                })
+            end
+        },
 
         {
             "neovim/nvim-lspconfig",
@@ -261,7 +284,9 @@ require("lazy").setup({
                         "kotlin",
                         "bash",
                         "terraform",
+                        "hyprlang", -- TODO: doesnt seem to do anything
                     },
+                    auto_install = true,
                     sync_install = false,
                     highlight = { enable = true },
                     indent = { enable = true },
@@ -404,6 +429,7 @@ require("lazy").setup({
                         -- NOTE: might be due to nvim-java/jdtls having a different formatter
                         -- java = { "google-java-format" },
                         kotlin = { "ktfmt" },
+                        nix = { "alejandra" },
                     },
                     format_on_save = {
                         -- These options will be passed to conform.format()
@@ -485,18 +511,18 @@ require("lazy").setup({
         --         })
         --     end,
         -- },
-        {
-            dir = "~/Documents/neovim_plugin_stuff/simple-nvim-plugin",
-            config = function()
-                require("simple-nvim-plugin")
-            end,
-        },
-        {
-            dir = "~/Documents/github/capslock-lualine.nvim",
-            -- config = function()
-            -- 	require("capslock-lualine").setup()
-            -- end,
-        },
+        -- {
+        --     dir = "~/Documents/neovim_plugin_stuff/simple-nvim-plugin",
+        --     config = function()
+        --         require("simple-nvim-plugin")
+        --     end,
+        -- },
+        -- {
+        --     dir = "~/Documents/github/capslock-lualine.nvim",
+        --     -- config = function()
+        --     -- 	require("capslock-lualine").setup()
+        --     -- end,
+        -- },
         {
             "MeanderingProgrammer/render-markdown.nvim",
             -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.nvim' }, -- if you use the mini.nvim suite
@@ -612,25 +638,6 @@ require("lint").linters_by_ft = {
 
 require("gitsigns").setup()
 
---TODO: if copilot prompt is under 3 characters, ignore
-require("copilot").setup({
-
-    filetypes = {
-        ["."] = true,
-    },
-
-    suggestion = {
-        enabled = true,
-        auto_trigger = true,
-        keymap = {
-            accept = "<M-a>",
-            --TODO: find a better bind (Alt+Right/Left is used for tab switching)
-            -- next = '<M-Right>',
-            -- prev = '<M-Left>',
-            dismiss = "<M-d>",
-        },
-    },
-})
 
 -- Map Ctrl+/ to toggle Line-comment
 -- TODO: Move cursor forward so many spaces after commenting
